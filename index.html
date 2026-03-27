@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkpoint Semanal - Hub de Integrações</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "▶";
+            margin-right: 10px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px;
+            margin-left: 30px;
+            border-left: 3px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -9px;
+            top: 25px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #667eea;
+        }
+
+        .item-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-completed {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge-in-progress {
+            background: #ff9800;
+            color: white;
+        }
+
+        .badge-not-started {
+            background: #9e9e9e;
+            color: white;
+        }
+
+        .badge-date {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-person {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .evolution-box {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .evolution-box.completed {
+            border-left-color: #4caf50;
+        }
+
+        .subsection {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+
+        .subsection-title {
+            font-size: 1.3em;
+            color: #555;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            background: #fafafa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+            transition: transform 0.2s;
+        }
+
+        .feature-item:hover {
+            transform: translateX(5px);
+        }
+
+        .feature-item.completed {
+            border-left-color: #4caf50;
+        }
+
+        .feature-item.in-progress {
+            border-left-color: #ff9800;
+        }
+
+        .feature-item.not-started {
+            border-left-color: #9e9e9e;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .highlight-box h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="titulo">🚀 Carregando...</h1>
+            <p id="subtitulo"></p>
+        </div>
+
+        <div class="content">
+            <div class="loading">Carregando dados...</div>
+        </div>
+    </div>
+
+    <!-- DADOS DO CHECKPOINT -->
+    <!-- Para atualizar os dados, basta editar o objeto JSON abaixo -->
+    <script id="checkpoint-data" type="application/json">
+    {
+      "titulo": "Hub de Integrações",
+      "subtitulo": "Checkpoint Semanal - Avanços do Projeto",
+      "dataAtualizacao": "26/03/2026",
+      "evolucaoTecnologica": [
+        {
+          "titulo": "Criação da POC inicial do projeto utilizando Kafka",
+          "descricao": "Esta POC inclui: eventos de criação de issue, atualização de issue e novas respostas de issues",
+          "status": "concluido",
+          "data": "28/01/2026",
+          "responsavel": null
+        },
+        {
+          "titulo": "Alteração da tecnologia para Amazon Simple Queue Service (SQS)",
+          "descricao": null,
+          "status": "concluido",
+          "data": "12/02/2026",
+          "responsavel": null
+        },
+        {
+          "titulo": "Testes com uma segunda integração (Github)",
+          "descricao": null,
+          "status": "concluido",
+          "data": "12/02/2026",
+          "responsavel": null
+        }
+      ],
+      "funcionalidadesImplementadas": [
+        {
+          "titulo": "Ambiente de Homologação (dende)",
+          "status": "concluido",
+          "data": "18/02/2026",
+          "responsavel": "Bruno"
+        },
+        {
+          "titulo": "Adicionar informações faltantes nas tabelas de issues existentes",
+          "descricao": "Organização, Index e colunas de Status e Sincronização das issues",
+          "status": "concluido",
+          "data": "24/02/2026",
+          "responsavel": null
+        },
+        {
+          "titulo": "Testes e correções de segurança",
+          "status": "concluido",
+          "data": "04/03/2026",
+          "responsavel": "Osvaldo"
+        },
+        {
+          "titulo": "Filas para processamento de eventos externos e internos",
+          "status": "concluido",
+          "data": "18/03/2026",
+          "responsavel": null
+        },
+        {
+          "titulo": "Sincronização de arquivos das issues",
+          "status": "concluido",
+          "data": "24/03/2026",
+          "responsavel": null
+        },
+        {
+          "titulo": "LOGs sobre os eventos do Webhook",
+          "status": "em-andamento",
+          "data": null,
+          "responsavel": null
+        },
+        {
+          "titulo": "Testes automatizados",
+          "status": "nao-iniciado",
+          "data": null,
+          "responsavel": null
+        }
+      ],
+      "parte1": {
+        "dataRecebimento": "23/03/2026",
+        "concluido": [
+          {
+            "titulo": "Integração Semiautomática",
+            "status": "concluido",
+            "data": "12/02/2026",
+            "responsavel": null
+          }
+        ],
+        "pendencias": [
+          {
+            "titulo": "Novas telas",
+            "status": "em-andamento",
+            "descricao": "Feito:<br>• Card de integração com botão \"Conectar\" => Já chama a rota do backend e leva o usuário para a autorização no Jira<br>• Explicação das ações dos card e Estados do card (tag)<br>• Retorno ao Tiflux e validação da integração:<br>&nbsp;&nbsp;&nbsp;&nbsp;◦ Em caso de sucesso, mostra o banner de sucesso e apresenta botões de configuração<br>&nbsp;&nbsp;&nbsp;&nbsp;◦ Em caso de erro apresenta a modal de erro e permite o usuário tentar de novo no Jira",
+            "data": "Iniciado: 23/03/2026",
+            "responsavel": "Andrielli"
+          },
+          {
+            "titulo": "Notificações de atualizações e respostas de issues",
+            "descricao": "Em processo de Review DEV 🟡",
+            "status": "em-andamento",
+            "data": "Iniciado: 19/03/2026",
+            "responsavel": "Osvaldo"
+          },
+          {
+            "titulo": "Automações",
+            "status": "em-andamento",
+            "descricao": "Sendo feito apenas o menu de configuração por enquanto",
+            "data": null,
+            "responsavel": null
+          },
+          {
+            "titulo": "Histórico do ticket",
+            "status": "nao-iniciado",
+            "data": null,
+            "responsavel": null
+          }
+        ]
+      }
+    }
+    </script>
+
+    <script>
+        // Função para calcular estatísticas
+        function calcularEstatisticas(data) {
+            let concluido = 0;
+            let emAndamento = 0;
+            let naoIniciado = 0;
+
+            // Contar evolução tecnológica
+            data.evolucaoTecnologica.forEach(item => {
+                if (item.status === 'concluido') concluido++;
+                else if (item.status === 'em-andamento') emAndamento++;
+                else if (item.status === 'nao-iniciado') naoIniciado++;
+            });
+
+            // Contar funcionalidades
+            data.funcionalidadesImplementadas.forEach(item => {
+                if (item.status === 'concluido') concluido++;
+                else if (item.status === 'em-andamento') emAndamento++;
+                else if (item.status === 'nao-iniciado') naoIniciado++;
+            });
+
+            // Contar parte 1
+            data.parte1.concluido.forEach(item => {
+                if (item.status === 'concluido') concluido++;
+            });
+
+            data.parte1.pendencias.forEach(item => {
+                if (item.status === 'em-andamento') emAndamento++;
+                else if (item.status === 'nao-iniciado') naoIniciado++;
+            });
+
+            return { concluido, emAndamento, naoIniciado };
+        }
+
+        // Função para obter o texto do status
+        function getStatusText(status) {
+            const statusMap = {
+                'concluido': 'Concluído',
+                'em-andamento': 'Em andamento',
+                'nao-iniciado': 'Não iniciado'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Função para obter a classe CSS do status
+        function getStatusClass(status) {
+            const classMap = {
+                'concluido': 'completed',
+                'em-andamento': 'in-progress',
+                'nao-iniciado': 'not-started'
+            };
+            return classMap[status] || '';
+        }
+
+        // Função para obter a classe CSS do badge
+        function getBadgeClass(status) {
+            const badgeMap = {
+                'concluido': 'badge-completed',
+                'em-andamento': 'badge-in-progress',
+                'nao-iniciado': 'badge-not-started'
+            };
+            return badgeMap[status] || '';
+        }
+
+        // Função para renderizar um item
+        function renderItem(item, isEvolution = false) {
+            const statusIcon = item.status === 'concluido' ? '✅' : '';
+            const itemClass = isEvolution ? 'evolution-box' : 'feature-item';
+            const statusClass = getStatusClass(item.status);
+
+            let html = `<div class="${itemClass} ${statusClass}">`;
+            html += `<div class="item-title">${statusIcon} ${item.titulo}</div>`;
+
+            if (item.descricao) {
+                html += `<p style="margin-top: 10px; color: #666;">${item.descricao}</p>`;
+            }
+
+            html += '<div class="item-meta">';
+            html += `<span class="badge ${getBadgeClass(item.status)}">${getStatusText(item.status)}</span>`;
+
+            if (item.data) {
+                html += `<span class="badge badge-date">📅 ${item.data}</span>`;
+            }
+
+            if (item.responsavel) {
+                html += `<span class="badge badge-person">👤 ${item.responsavel}</span>`;
+            }
+
+            html += '</div></div>';
+
+            return html;
+        }
+
+        // Função para renderizar lista de items
+        function renderItemList(items, isEvolution = false) {
+            if (isEvolution) {
+                return items.map(item => renderItem(item, true)).join('');
+            } else {
+                return '<ul class="feature-list">' +
+                    items.map(item => `<li>${renderItem(item, false)}</li>`).join('') +
+                    '</ul>';
+            }
+        }
+
+        // Função para carregar e renderizar os dados
+        function carregarDados() {
+            try {
+                // Ler dados do script tag
+                const dataScript = document.getElementById('checkpoint-data');
+                const data = JSON.parse(dataScript.textContent);
+
+                // Atualizar título e subtítulo
+                document.getElementById('titulo').textContent = `🚀 ${data.titulo}`;
+                document.getElementById('subtitulo').textContent = data.subtitulo;
+
+                // Calcular estatísticas
+                const stats = calcularEstatisticas(data);
+
+                // Renderizar conteúdo
+                const content = document.querySelector('.content');
+                content.innerHTML = `
+                    <!-- Estatísticas -->
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-number">${stats.concluido}</div>
+                            <div class="stat-label">Tarefas Concluídas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${stats.emAndamento}</div>
+                            <div class="stat-label">Em Andamento</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${stats.naoIniciado}</div>
+                            <div class="stat-label">Não Iniciadas</div>
+                        </div>
+                    </div>
+
+                    <!-- Evolução Tecnológica -->
+                    <div class="section">
+                        <h2 class="section-title">Evolução Tecnológica</h2>
+                        ${renderItemList(data.evolucaoTecnologica, true)}
+                    </div>
+
+                    <!-- Funcionalidades -->
+                    <div class="section">
+                        <h2 class="section-title">Funcionalidades</h2>
+                        ${renderItemList(data.funcionalidadesImplementadas, false)}
+                    </div>
+
+                    <!-- Parte 1 - História Recebida -->
+                    <div class="section">
+                        <h2 class="section-title">Parte 1: Jira - Tela de Configuração</h2>
+
+                        <div class="highlight-box">
+                            <h3>📋 Recebido em ${data.parte1.dataRecebimento}</h3>
+
+                            <div class="subsection">
+                                <div class="subsection-title">✅ Concluído:</div>
+                                ${renderItemList(data.parte1.concluido, false)}
+                            </div>
+
+                            <div class="subsection">
+                                <div class="subsection-title">🔄 Pendências:</div>
+                                ${renderItemList(data.parte1.pendencias, false)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                document.querySelector('.content').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #d32f2f;">
+                        <h2>Erro ao carregar dados</h2>
+                        <p>Verifique se o JSON está correto no script tag.</p>
+                        <p style="margin-top: 10px; font-size: 0.9em; color: #666;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Carregar dados quando a página estiver pronta
+        document.addEventListener('DOMContentLoaded', carregarDados);
+    </script>
+</body>
+</html>
